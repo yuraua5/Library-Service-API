@@ -1,15 +1,39 @@
 from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+
 from rest_framework.response import Response
 
 from borrowings.models import Borrowing
+from borrowings.permissions import IsOwnerOrAdmin
 from borrowings.serializers import BorrowListSerializer, BorrowDetailSerializer
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.all()
     serializer_class = BorrowListSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+
+
+    def get_queryset(self):
+        user_id = self.request.query_params.get("user_id")
+        is_active = self.request.query_params.get("is_active")
+
+        queryset = self.queryset
+
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(user=self.request.user)
+
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+
+        if is_active:
+            if is_active == "true":
+                queryset = queryset.filter(actual_return_date__isnull=True)
+            if is_active == "false":
+                queryset = queryset.filter(actual_return_date__isnull=False)
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
