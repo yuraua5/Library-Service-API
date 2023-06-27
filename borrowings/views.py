@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
 
+from Library_Service_API.permissions import IsOwnerOrAdmin
 from borrowings.models import Borrowing
-from borrowings.permissions import IsOwnerOrAdmin
+
 from borrowings.serializers import BorrowListSerializer, BorrowDetailSerializer
 
 
@@ -14,7 +15,6 @@ class BorrowViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.all()
     serializer_class = BorrowListSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
-
 
     def get_queryset(self):
         user_id = self.request.query_params.get("user_id")
@@ -55,7 +55,10 @@ class BorrowViewSet(viewsets.ModelViewSet):
         borrowing = self.get_object()
 
         if borrowing.actual_return_date is not None:
-            return Response({"message": "Book has already been returned."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "Book has already been returned."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         borrowing.actual_return_date = timezone.now()
         borrowing.save()
