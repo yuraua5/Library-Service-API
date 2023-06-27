@@ -9,6 +9,7 @@ from Library_Service_API.permissions import IsOwnerOrAdmin
 from borrowings.models import Borrowing
 
 from borrowings.serializers import BorrowListSerializer, BorrowDetailSerializer
+from payment.utils import create_stripe_session
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
@@ -49,6 +50,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         book = borrowing.book
         book.inventory -= 1
         book.save()
+        create_stripe_session(borrowing)
 
     @action(detail=True, methods=["post"])
     def return_book(self, request, pk=None):

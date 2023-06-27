@@ -5,6 +5,7 @@ from books.models import Book
 from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from borrowings.tasks import send_telegram_notification
+from payment.serializers import PaymentSerializer
 
 
 class BorrowListSerializer(serializers.ModelSerializer):
@@ -44,6 +45,7 @@ class BorrowListSerializer(serializers.ModelSerializer):
 
 class BorrowDetailSerializer(BorrowListSerializer):
     book = BookSerializer(many=False, read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Borrowing
@@ -54,5 +56,6 @@ class BorrowDetailSerializer(BorrowListSerializer):
             "actual_return_date",
             "book",
             "user",
+            "payments",
         ]
-        read_only_fields = ["actual_return_date", "user", "book"]
+        read_only_fields = ["actual_return_date", "user", "book", "payments"]
