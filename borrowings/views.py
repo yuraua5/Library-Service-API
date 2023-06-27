@@ -50,7 +50,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         book = borrowing.book
         book.inventory -= 1
         book.save()
-        create_stripe_session(borrowing)
+        create_stripe_session(borrowing, self.request)
 
     @action(detail=True, methods=["post"])
     def return_book(self, request, pk=None):
