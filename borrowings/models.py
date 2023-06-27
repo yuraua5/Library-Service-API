@@ -18,3 +18,8 @@ class Borrowing(models.Model):
 
     def __str__(self):
         return self.book.title
+
+    def calculate_total_price(self):
+        total_price = (self.expected_return_date - self.borrow_date).days * self.book.daily_fee
+        return total_price
+
