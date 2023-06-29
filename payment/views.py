@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Library_Service_API.permissions import IsOwnerOrAdmin
+from books.pagination import Pagination
 from payment.models import Payment
 from payment.serializers import PaymentSerializer
 
@@ -12,6 +13,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    pagination_class = Pagination
 
 
 class PaymentSuccessView(generics.GenericAPIView):

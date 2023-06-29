@@ -3,21 +3,26 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
 
 from Library_Service_API.permissions import IsOwnerOrAdmin
+from books.pagination import Pagination
 from borrowings.models import Borrowing
 
 from borrowings.serializers import BorrowListSerializer, BorrowDetailSerializer
 from payment.utils import create_stripe_session
 
 
+
+
 class BorrowViewSet(viewsets.ModelViewSet):
     queryset = Borrowing.objects.all().select_related("book")
     serializer_class = BorrowListSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
+    pagination_class = Pagination
 
     def get_queryset(self):
         user_id = self.request.query_params.get("user_id")
