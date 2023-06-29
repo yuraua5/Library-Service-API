@@ -56,7 +56,7 @@ class BorrowViewSet(viewsets.ModelViewSet):
         book.save()
         create_stripe_session(borrowing, self.request)
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], url_path="return")
     def return_book(self, request, pk=None):
         borrowing = self.get_object()
 
