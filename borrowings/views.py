@@ -15,7 +15,7 @@ from payment.utils import create_stripe_session
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
-    queryset = Borrowing.objects.all()
+    queryset = Borrowing.objects.all().select_related("book")
     serializer_class = BorrowListSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
