@@ -8,7 +8,7 @@ router.register("borrowings", BorrowViewSet)
 
 urlpatterns = [
     path(
-        "/return/",
+        "return/",
         BorrowViewSet.as_view({"post": "return_book"}),
         name="borrowing-return",
     ),
