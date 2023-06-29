@@ -3,7 +3,6 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
@@ -14,8 +13,6 @@ from borrowings.models import Borrowing
 
 from borrowings.serializers import BorrowListSerializer, BorrowDetailSerializer
 from payment.utils import create_stripe_session
-
-
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
