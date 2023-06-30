@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: celery -A Library_Service_API worker -l INFO
+    command: celery -A library_service worker -l INFO
     depends_on:
       - web
       - redis
@@ -47,7 +47,7 @@ services:
       dockerfile: Dockerfile
     command: >
       sh -c "python manage.py wait_for_db &&
-             celery -A Library_Service_API beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+             celery -A library_service beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     depends_on:
       - web
       - redis

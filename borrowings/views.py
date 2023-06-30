@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.response import Response
 
-from Library_Service_API.permissions import IsOwnerOrAdmin
+from library_service.permissions import IsOwnerOrAdmin
 from books.pagination import Pagination
 from borrowings.models import Borrowing
 

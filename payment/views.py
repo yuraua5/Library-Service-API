@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from Library_Service_API.permissions import IsOwnerOrAdmin
+from library_service.permissions import IsOwnerOrAdmin
 from books.pagination import Pagination
 from payment.models import Payment
 from payment.serializers import PaymentSerializer

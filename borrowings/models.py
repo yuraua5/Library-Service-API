@@ -1,6 +1,6 @@
 from django.db import models
 
-from Library_Service_API import settings
+from library_service import settings
 from books.models import Book
 
 

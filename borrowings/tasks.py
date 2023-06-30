@@ -4,7 +4,7 @@ from datetime import timedelta
 import telegram
 from django.utils.timezone import localtime
 
-from Library_Service_API import settings
+from library_service import settings
 
 from celery import shared_task
 
