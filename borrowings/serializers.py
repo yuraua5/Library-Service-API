@@ -6,6 +6,7 @@ from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from borrowings.tasks import send_telegram_notification
 from payment.serializers import PaymentSerializer
+from payment.utils import create_stripe_session
 
 
 class BorrowListSerializer(serializers.ModelSerializer):
@@ -36,8 +37,16 @@ class BorrowListSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        borrowing = super().create(validated_data)
+        request = self.context["request"]
+        user = request.user
 
+        book = validated_data["book"]
+        book.inventory -= 1
+        book.save()
+
+        borrowing = Borrowing.objects.create(user=user, **validated_data)
+
+        create_stripe_session(borrowing, request)
         send_telegram_notification.delay(borrowing.id)
 
         return borrowing

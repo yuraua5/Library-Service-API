@@ -49,13 +49,6 @@ class BorrowViewSet(viewsets.ModelViewSet):
 
         return BorrowListSerializer
 
-    def perform_create(self, serializer):
-        borrowing = serializer.save(user=self.request.user)
-        book = borrowing.book
-        book.inventory -= 1
-        book.save()
-        create_stripe_session(borrowing, self.request)
-
     @action(detail=True, methods=["post"], url_path="return")
     def return_book(self, request, pk=None):
         borrowing = self.get_object()
