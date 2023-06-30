@@ -1,5 +1,5 @@
 import asyncio
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 import telegram
 from django.utils.timezone import localtime
@@ -11,17 +11,17 @@ from celery import shared_task
 from borrowings.models import Borrowing
 
 
-def format_datetime(datetime_obj):
+def format_datetime(datetime_obj: datetime) -> datetime:
     return localtime(datetime_obj).strftime("%Y-%m-%d")
 
 
-async def send_telegram_message(bot_token, chat_id, message):
+async def send_telegram_message(bot_token: str, chat_id: str, message: str) -> None:
     bot = telegram.Bot(token=bot_token)
     await bot.send_message(chat_id=chat_id, text=message)
 
 
 @shared_task
-def send_telegram_notification(borrowing_id):
+def send_telegram_notification(borrowing_id: int) -> None:
     borrowing = Borrowing.objects.get(id=borrowing_id)
     borrow_date = format_datetime(borrowing.borrow_date)
     expected_return_date = format_datetime(borrowing.expected_return_date)
@@ -39,7 +39,7 @@ def send_telegram_notification(borrowing_id):
 
 
 @shared_task
-def send_notification_about_overdue_borrowings():
+def send_notification_about_overdue_borrowings() -> None:
     tomorrow = localtime() + timedelta(days=1)
     overdue_borrowings = Borrowing.objects.filter(
         expected_return_date__lte=tomorrow, actual_return_date__isnull=True
