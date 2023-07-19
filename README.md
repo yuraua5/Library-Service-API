@@ -1,4 +1,4 @@
-# Library-Service-API
+# LiteraryLease-API
 
 Library-Service-API written on DRF
 
